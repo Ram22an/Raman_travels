@@ -1,8 +1,38 @@
 from tkinter import *
+from tkinter.messagebox import askyesno
 from PIL import ImageTk,Image
 import sqlite3 as sq
 def finctioncall():
     displaydetail(desto_var, desfrom_var, desdate_var)
+def functioncall2(noseat,listofval,i):
+    askyesornoinfun(noseat,listofval,i)
+def askyesornoinfun(noseatreal,listofval,i):
+    noseatreal1=noseatreal.get()
+    result = askyesno("Fare Confirmation !!", f"Total amount to be paid Rs {noseatreal1*listofval[i][4]}")
+
+def bookingdetail(listofval,i):
+    # useable varibale name_val,v1,noseatreal,mobilenoreal
+    Label(root,text="FILL PASSENGER DETAILS TO BOOK THE BUS TICKET",fg="red",bg="CadetBlue1",font="Arial 30 bold").grid(row=8,columnspan=50,pady=10)
+    Label(root,text="Name:").grid(row=9,column=12)
+    name_var=StringVar()
+    name_val=Entry(root,textvariable=name_var).grid(row=9,column=13)
+    Label(root,text="Gender:").grid(row=9,column=14)
+    v1=StringVar()
+    v1.set("click to select")
+    option=["Male","female"]
+    OptionMenu(root,v1,*option).grid(row=9,column=15)
+    Label(root,text="No of Seats:").grid(row=9,column=16)
+    noseat=IntVar()
+    noseatreal=Entry(root,textvariable=noseat).grid(row=9,column=17)
+    Label(root,text="Mobile no:").grid(row=9,column=18)
+    mobileno=IntVar()
+    mobilenoreal=Entry(root,textvariable=mobileno).grid(row=9,column=19)
+    Label(root,text="Age:").grid(row=9,column=20)
+    age=IntVar()
+    agereal=Entry(root,textvariable=age).grid(row=9,column=21)
+    Button(root,text="Book Seat",command=functioncall2(noseat,listofval,i)).grid(row=9,column=22)
+
+
 
 def displaydetail(desto, desfrom, desdate):
     Label(root,text="Select bus",fg="green4",font="Arial 10 bold").grid(row=5,column=13)
@@ -13,9 +43,18 @@ def displaydetail(desto, desfrom, desdate):
     destoval=desto.get()
     desfromval=desfrom.get()
     desdatevale=desdate.get()
-    busdetailval=cursor.execute("select Operator,Bus_type,Available,Capacity,Fare from local_bus_real where To_dest=? and FROM_dest=? and Journey_date=?",(destoval,desfromval,desdatevale))
-    listofval=busdetailval.fetchall()
-    print(listofval)
+    busdetailval = cursor.execute("select Operator, Bus_type, Available, Capacity, Fare from local_bus_real where To_dest=? and FROM_dest=? and Journey_date=?", (destoval, desfromval, desdatevale))
+    listofval = busdetailval.fetchall()
+    busch=IntVar()
+    r1=IntVar()
+    busch.set(-1)
+    for i in range(0,len(listofval)):
+        r1=Radiobutton(root,text=f"Bus {i}",variable=busch,value=1).grid(row=i+6,column=13)
+        Label(root,text=f"{listofval[i][0]}",fg="blue2",font="Arial 12 bold").grid(row=i+6,column=14)
+        Label(root,text=f"{listofval[i][1]}",fg="blue2",font="Arial 12 bold").grid(row=i+6,column=15)
+        Label(root,text=f"{listofval[i][2]}/{listofval[i][3]}",fg="blue2",font="Arial 12 bold").grid(row=i+6,column=16)
+        Label(root,text=f"{listofval[i][4]}",fg="blue2",font="Arial 12 bold").grid(row=i+6,column=17)
+        Button(root,text="Proceed to book",command=bookingdetail(listofval,i),bg="pale green").grid(row=i+6,column=20)
 
 
 fontFam="Arial"
@@ -56,9 +95,14 @@ cursor.execute('''CREATE TABLE IF NOT EXISTS local_bus_real (
                     Capacity int,
                     Fare int
                 )''')
-with open('busdetail.txt', 'r') as file:
-    for line in file:
-        words=line.split()
-        cursor.execute("INSERT INTO local_bus_real (To_dest, FROM_dest, Journey_date, Operator, Bus_type, Available, Capacity, Fare) VALUES (?, ?, ?, ?, ?, ?, ?, ?)",(words[0], words[1], words[2], words[3], words[4], int(words[5]), int(words[6]), int(words[7])))
-connection.commit()
+cursor.execute("select * from local_bus_real")
+table_exists=cursor.fetchall()
+if not table_exists:
+    with open('busdetail.txt', 'r') as file:
+        for line in file:
+            words=line.split()
+            cursor.execute("INSERT INTO local_bus_real (To_dest, FROM_dest, Journey_date, Operator, Bus_type, Available, Capacity, Fare) VALUES (?, ?, ?, ?, ?, ?, ?, ?)",(words[0], words[1], words[2], words[3], words[4], int(words[5]), int(words[6]), int(words[7])))
+    connection.commit()
+else:
+    pass
 root.mainloop()
