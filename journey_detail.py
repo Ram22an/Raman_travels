@@ -2,25 +2,23 @@ from tkinter import *
 from tkinter.messagebox import askyesno
 from PIL import ImageTk,Image
 import sqlite3 as sq
-def finctioncall():
+def displaydetailcover():
     displaydetail(desto_var, desfrom_var, desdate_var)
-def functioncall2(noseat,listofval,i):
-    askyesornoinfun(noseat,listofval,i)
-def askyesornoinfun(noseatreal,listofval,i):
-    noseatreal1=noseatreal.get()
-    result = askyesno("Fare Confirmation !!", f"Total amount to be paid Rs {noseatreal1*listofval[i][4]}")
-
-def bookingdetail(listofval,i):
-    # useable varibale name_val,v1,noseatreal,mobilenoreal
+def askyesornoinfuncover(name_var,optionmenu,noseatreal,mobilenoreal,agereal,val):
+    askyesornoinfun(name_var,optionmenu,noseatreal,mobilenoreal,agereal,val)
+def bookingdetailcover(val):
+    bookingdetail(val)
+def bookingdetail(val):
+    # useable varibale name_val,v1,noseat,mobileno,age
     Label(root,text="FILL PASSENGER DETAILS TO BOOK THE BUS TICKET",fg="red",bg="CadetBlue1",font="Arial 30 bold").grid(row=8,columnspan=50,pady=10)
     Label(root,text="Name:").grid(row=9,column=12)
     name_var=StringVar()
     name_val=Entry(root,textvariable=name_var).grid(row=9,column=13)
     Label(root,text="Gender:").grid(row=9,column=14)
-    v1=StringVar()
+    v1=StringVar(root)
     v1.set("click to select")
     option=["Male","female"]
-    OptionMenu(root,v1,*option).grid(row=9,column=15)
+    optionmenu=OptionMenu(root,v1,*option).grid(row=9,column=15)
     Label(root,text="No of Seats:").grid(row=9,column=16)
     noseat=IntVar()
     noseatreal=Entry(root,textvariable=noseat).grid(row=9,column=17)
@@ -30,7 +28,30 @@ def bookingdetail(listofval,i):
     Label(root,text="Age:").grid(row=9,column=20)
     age=IntVar()
     agereal=Entry(root,textvariable=age).grid(row=9,column=21)
-    Button(root,text="Book Seat",command=functioncall2(noseat,listofval,i)).grid(row=9,column=22)
+    Button(root,text="Book Seat",command=lambda:askyesornoinfuncover(name_var,v1,noseat,mobileno,age,val)).grid(row=9,column=22)
+    
+
+def askyesornoinfun(name_val,v1,noseat,mobileno,age,val):
+    nameval=name_val.get()
+    noseatval=noseat.get()
+    mobilval=mobileno.get()
+    ageval=age.get()
+    v1val=v1.get()
+    result = askyesno("Fare Confirmation !!", f"Total amount to be paid Rs {noseatval*val}")
+    connection1 = sq.connect("customer_detail.db")
+    cursor1 = connection1.cursor()
+    cursor1.execute('''CREATE TABLE IF NOT EXISTS customer_detail_real (
+                    name varchar(20),
+                    no_of_seat int,
+                    mobile_no int(10),
+                    age int,
+                    gender varchar(7),
+                    fare int
+                )''')
+    table_Exists1=cursor1.execute("select * from customer_detail_real")
+    if not table_Exists1:
+        cursor1.execute("INSERT INTO customer_detail_real(name,no_of_seat,mobile,age,gander,fare) VALUES(?,?,?,?,?,?)",(nameval,noseatval,mobilval,ageval,v1val,val))
+        connection1.commit()
 
 
 
@@ -54,7 +75,7 @@ def displaydetail(desto, desfrom, desdate):
         Label(root,text=f"{listofval[i][1]}",fg="blue2",font="Arial 12 bold").grid(row=i+6,column=15)
         Label(root,text=f"{listofval[i][2]}/{listofval[i][3]}",fg="blue2",font="Arial 12 bold").grid(row=i+6,column=16)
         Label(root,text=f"{listofval[i][4]}",fg="blue2",font="Arial 12 bold").grid(row=i+6,column=17)
-        Button(root,text="Proceed to book",command=bookingdetail(listofval,i),bg="pale green").grid(row=i+6,column=20)
+        Button(root,text="Proceed to book",command=lambda:bookingdetailcover(listofval[i][4]),bg="pale green").grid(row=i+6,column=20)
 
 
 fontFam="Arial"
@@ -78,7 +99,7 @@ desfrom=Entry(root,textvariable=desfrom_var).grid(row=4,column=16)
 Label(root,text="DATE").grid(row=4,column=17)
 desdate_var = StringVar() 
 desdate=Entry(root,textvariable=desdate_var).grid(row=4,column=18)
-Button(root,text="SHOW BUS",command=finctioncall,fg="black",bg="spring green",font="Arial 10 bold").grid(row=4,column=20)
+Button(root,text="SHOW BUS",command=displaydetailcover,fg="black",bg="spring green",font="Arial 10 bold").grid(row=4,column=20)
 house=Image.open("House.png")
 house = house.resize((75,50 ))
 house = ImageTk.PhotoImage(house) 
