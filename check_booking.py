@@ -1,5 +1,6 @@
 from tkinter import *
 from PIL import ImageTk,Image
+from tkinter.messagebox import askyesno
 import sqlite3 as sq
 fontFam="Arial"
 def printticket(phone_no):
@@ -7,29 +8,32 @@ def printticket(phone_no):
     cursor1 = connection1.cursor()
     cursor1.execute("SELECT * FROM customer_detail_real WHERE mobile_no = ? LIMIT 1", (int(phone_no.get()),))
     detail_of_customer = cursor1.fetchall()
-    print(detail_of_customer)
-    name_of_customer=detail_of_customer[0][0]
-    no_of_seat=detail_of_customer[0][1]
-    mobile_no=detail_of_customer[0][2]
-    age_of_customer=detail_of_customer[0][3]
-    gender_of_customer=detail_of_customer[0][4]
-    total_fare=detail_of_customer[0][5]
-    frame = Frame(root, bd=3, relief=SUNKEN)
-    frame.grid(row=5,columnspan=50, padx=20, pady=20)
-    label = Label(frame, text=f"Passenger:- {name_of_customer}",font="Arial 12 bold")
-    label.grid(row=0, column=0, padx=10, pady=10)
-    label = Label(frame, text=f"Gender:- {gender_of_customer}",font="Arial 12 bold")
-    label.grid(row=0, column=1, padx=10, pady=10)
-    label = Label(frame, text=f"No of seat :- {no_of_seat}",font="Arial 12 bold")
-    label.grid(row=1, column=0, padx=10, pady=10)
-    label = Label(frame, text=f"Phone:- {mobile_no}",font="Arial 12 bold")
-    label.grid(row=1, column=1, padx=10, pady=10)
-    label = Label(frame, text=f"Age :- {age_of_customer}",font="Arial 12 bold")
-    label.grid(row=2, column=0, padx=10, pady=10)
-    label = Label(frame, text=f"Fare :- Rs {total_fare*no_of_seat}",font="Arial 12 bold")
-    label.grid(row=2, column=1, padx=10, pady=10)
-    label = Label(frame, text=f"*Total amount Rs {total_fare*no_of_seat} to be paid at time of boarding of bus",font="Arial 10")
-    label.grid(row=3, columnspan=10, padx=10, pady=10)
+    if not detail_of_customer:
+        result = askyesno("NO BOOKING RECORD", "Do you want to book seat now")
+        print(result)
+    else:
+        name_of_customer=detail_of_customer[0][0]
+        no_of_seat=detail_of_customer[0][1]
+        mobile_no=detail_of_customer[0][2]
+        age_of_customer=detail_of_customer[0][3]
+        gender_of_customer=detail_of_customer[0][4]
+        total_fare=detail_of_customer[0][5]
+        frame = Frame(root, bd=3, relief=SUNKEN)
+        frame.grid(row=5,columnspan=50, padx=20, pady=20)
+        label = Label(frame, text=f"Passenger:- {name_of_customer}",font="Arial 12 bold")
+        label.grid(row=0, column=0, padx=10, pady=10)
+        label = Label(frame, text=f"Gender:- {gender_of_customer}",font="Arial 12 bold")
+        label.grid(row=0, column=1, padx=10, pady=10)
+        label = Label(frame, text=f"No of seat :- {no_of_seat}",font="Arial 12 bold")
+        label.grid(row=1, column=0, padx=10, pady=10)
+        label = Label(frame, text=f"Phone:- {mobile_no}",font="Arial 12 bold")
+        label.grid(row=1, column=1, padx=10, pady=10)
+        label = Label(frame, text=f"Age :- {age_of_customer}",font="Arial 12 bold")
+        label.grid(row=2, column=0, padx=10, pady=10)
+        label = Label(frame, text=f"Fare :- Rs {total_fare*no_of_seat}",font="Arial 12 bold")
+        label.grid(row=2, column=1, padx=10, pady=10)
+        label = Label(frame, text=f"*Total amount Rs {total_fare*no_of_seat} to be paid at time of boarding of bus",font="Arial 10")
+        label.grid(row=3, columnspan=10, padx=10, pady=10)
 root=Tk()
 screen_width = root.winfo_screenwidth()
 screen_height = root.winfo_screenheight()

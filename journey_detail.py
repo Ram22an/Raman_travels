@@ -29,8 +29,6 @@ def bookingdetail(val):
     age=IntVar()
     agereal=Entry(root,textvariable=age).grid(row=9,column=21)
     Button(root,text="Book Seat",command=lambda:askyesornoinfuncover(name_var,v1,noseat,mobileno,age,val)).grid(row=9,column=22)
-    
-
 def askyesornoinfun(name_val,v1,noseat,mobileno,age,val):
     nameval=name_val.get()
     noseatval=noseat.get()
@@ -54,9 +52,6 @@ def askyesornoinfun(name_val,v1,noseat,mobileno,age,val):
     cursor1.execute("select * from customer_detail_real limit 1")
     listofcustomer=cursor1.fetchall()
     print(listofcustomer)
-
-
-
 def displaydetail(desto, desfrom, desdate):
     Label(root,text="Select bus",fg="green4",font="Arial 10 bold").grid(row=5,column=13)
     Label(root,text="Operator",fg="green4",font="Arial 10 bold").grid(row=5,column=14)        
@@ -78,8 +73,6 @@ def displaydetail(desto, desfrom, desdate):
         Label(root,text=f"{listofval[i][2]}/{listofval[i][3]}",fg="blue2",font="Arial 12 bold").grid(row=i+6,column=16)
         Label(root,text=f"{listofval[i][4]}",fg="blue2",font="Arial 12 bold").grid(row=i+6,column=17)
         Button(root,text="Proceed to book",command=lambda:bookingdetailcover(listofval[i][4]),bg="pale green").grid(row=i+6,column=20)
-
-
 fontFam="Arial"
 root=Tk()
 screen_width = root.winfo_screenwidth()
