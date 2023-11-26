@@ -14,5 +14,4 @@ Button(root,text="SEAT BOOKING",command=root.bell,font=f"{fontFam} 20 bold",bg="
 Button(root,text="CHECK BOOKED SEAT",command=root.bell,font=f"{fontFam} 20 bold",bg="lime green").grid(padx=100,row=3,column=2,pady=50)
 Button(root,text="ADD BUS DETAIL",command=root.bell,font=f"{fontFam} 20 bold",bg="lime green").grid(padx=100,row=3,column=3,pady=50)
 Label(root,text="For Admin Only",fg="red",font=f"{fontFam} 15 bold").grid(row=4,column=3)
-
 root.mainloop()

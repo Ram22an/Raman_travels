@@ -14,4 +14,5 @@ Label(root,text="Created by: Raman Soni",fg="Dark Blue",font=(fontFam,20)).pack(
 Label(root,text="github: https://github.com/Ram22an",fg="Dark Blue",font=(fontFam,20)).pack(pady=20)
 Label(root,text="linkedin: https://www.linkedin.com/in/raman-soni-09764524a",fg="Dark Blue",font=(fontFam,20)).pack(pady=20)
 Label(root,text="Project based learing",fg="Dark Blue",font=(fontFam,20)).pack()
+Label(root,text="Please Wait for 5 seconds",fg="red",font=(fontFam,12)).pack(pady=20)
 root.mainloop()

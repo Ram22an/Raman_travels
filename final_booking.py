@@ -38,4 +38,5 @@ label = Label(frame, text=f"Fare :- Rs {total_fare*no_of_seat}",font="Arial 12 b
 label.grid(row=2, column=1, padx=10, pady=10)
 label = Label(frame, text=f"*Total amount Rs {total_fare*no_of_seat} to be paid at time of boarding of bus",font="Arial 10")
 label.grid(row=3, columnspan=10, padx=10, pady=10)
+connection1.close()
 root.mainloop()
